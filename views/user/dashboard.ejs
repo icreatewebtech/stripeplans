@@ -1,0 +1,194 @@
+<%- include('./partials/header.ejs'); %> 
+<%- include('./partials/navbar.ejs'); %> 
+
+<div class="container-fluid">
+    <% if(user.status === 'active' && (user.password == "" || user.password == null)) {  %>         
+        <div class="col-sm-12">
+            <div class="card" style="width: 350px;">
+                <div class="card-body">
+                    <form action="/user/createPassword" method="post">
+                        <input type="hidden" name="user_id" value="<%= user.id %>">
+                        <div class="form-group">
+                            <label for="forNewPasswor">Password</label>
+                            <input type="password" name="password" id="forNewPasswor" class="form-control" >
+                        </div>
+                        <div class="form-group">
+                            <label for="forConfirmPasswor">Confirm Password</label>
+                            <input type="password" name="confirmPassword" id="forConfirmPasswor" class="form-control" >
+                        </div>
+                        <input type="submit" value="Create Password" class="btn btn-primary">
+                    </form>
+                </div>
+            </div>
+        </div>
+    <% } else { %>
+        <div class="row">
+            <div class="col-sm-12 mb-2">
+                <div class="card">
+                    <div class="card-body">
+                        <form method="post" action="/stripe/cancelSubcription">                            
+                            <div class="form-group">                                
+                                <input type="hidden" name="customerId" value="<%= user.customerId %>">
+                                <input type="hidden" name="subcriptionId" value="<%= user.subcriptionId %>">
+                            </div>
+                        <% if(user.cancelAtPeriodEnd == 'false') { %>
+                            <label for="cancel-subcription">Your Subcription renew in : <%= user.currentPeriodEnd %> </label>                                        
+                            <input type="submit" name="cancelSubcription" value="Cancel Subcription" class="btn btn-danger">                                         
+                        <% } else { %>
+                            <label for="cancel-subcription">Your Subcription end in : <%= user.currentPeriodEnd %> </label>
+                            <input type="submit" name="renewSubcription" value="Auto renew" class="btn btn-primary">
+                        <% } %>
+                        </form>         
+                    </div>                    
+                </div>
+            </div>
+        </div> 
+        <div class="row">
+            <div class="col-sm-4">                
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-header">Your Details</h4>
+                        <table id="customerTable" class="table table-responsive">
+                            <tr>
+                                <th>Customer Id</th>
+                                <td><%= user.customerId %> </td>
+                            </tr>
+                            <tr>
+                                <th>Plan name</th>
+                                <td>
+                                    <%= user.planName %> 
+                                    <% if(user.planName === "Free") { %> 
+                                        &nbsp;&nbsp;&nbsp;<!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                           Upgrade Plan
+                                          </button>
+                                    <% }else if(user.planName === "Silver") { %>
+                                        <form action="/stripe/upgradePlan" method="post">
+                                            <input type="hidden" name="subcriptionId" value="<%= user.subcriptionId %>">
+                                            <input type="hidden" name="customerId" value="<%= user.customerId %>">
+                                            <input type="hidden" name="planName" value="Gold Plan">
+                                            <input type="submit" name="upgrade" value="Upgrade to premium" class="btn btn-primary">                       
+                                        </form>
+                                    <% } %> 
+                                </td>
+                            </tr>                    
+                            <tr>
+                                <th>Subcription Id</th>
+                                <td><%= user.subcriptionId %> </td>
+                            </tr>
+                            <tr>
+                                <th>Name</th>
+                                <td><%= user.name %> </td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td><%= user.email %> </td>
+                            </tr>
+                            <tr>
+                                <th>country</th>
+                                <td><%= user.country %> </td>
+                            </tr>
+                            <tr>
+                                <th>state</th>
+                                <td><%= user.state %> </td>
+                            </tr>
+                            <tr>
+                                <th>City</th>
+                                <td><%= user.city %> </td>
+                            </tr>
+                            <tr>
+                                <th>Phone</th>
+                                <td><%= user.phone %> </td>
+                            </tr>
+                            <tr>
+                                <th>Currency</th>
+                                <td><%= user.currency %> </td>
+                            </tr>
+                            <tr>
+                                <th>Plan Start</th>
+                                <td><%= user.currentPeriodStart %> </td>
+                            </tr>
+                            <tr>
+                                <th>Plan End</th>
+                                <td><%= user.currentPeriodEnd %> </td>
+                            </tr>
+                            <tr>
+                                <th>Status</th>
+                                <td><%= user.status %> </td>
+                            </tr>                    
+                        </table>
+                    </div>
+                </div>                
+            </div>
+            <div class="col-sm-8">   
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-header">Your Orders</h4>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Date</th>
+                                    <th>Currency</th>
+                                    <th>Description</th>
+                                    <th>Transaction id</th>
+                                    <th>Download invoice</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>        
+                            <% if(orders.length) { %>    
+                                <% for(let i = 0; i < orders.length; i++ ) { %>                    
+                                <tr>
+                                    <td><%= orders[i].dataValues.id %></td>
+                                    <td><%= orders[i].dataValues.createdAt %></td>
+                                    <td><%= orders[i].dataValues.currency %></td>
+                                    <td><%= orders[i].dataValues.billingReason %></td>
+                                    <td><%= orders[i].dataValues.balanceTransactionId %> </td>
+                                    <td><a href="<%= orders[i].dataValues.invoicePdf %>" class="btn btn-primary">Download</a></td>
+                                    <td><%= orders[i].dataValues.status %></td>                                    
+                                </tr>
+                                <% } %> 
+                            <% } %> 
+                            </tbody>                                            
+                        </table>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } %>    
+</div>
+
+<!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form action="/stripe/upgradePlan" method="post">
+                <div class="form-group">
+                    <input type="hidden" name="subcriptionId" value="<%= user.subcriptionId %>">
+                    <input type="hidden" name="customerId" value="<%= user.customerId %>">
+                    <label for="forlplanselect">Select Plan</label>
+                    <Select name="planName" class="form-control">
+                        <option value="Silver">Silver</option>
+                        <option value="Gold Plan">Gold Plan</option>
+                    </Select>
+                </div>            
+            
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" name="upgrade" class="btn btn-primary">Upgrade</button>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<%- include('./partials/footer.ejs'); %> 

@@ -1,0 +1,49 @@
+<%- include('./partials/header.ejs'); %> 
+<%- include('./partials/navbar.ejs'); %> 
+<% if(data) { %> 
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-5">
+            <div class="caard">
+                <div class="card-body">
+                    <h4 class="cart-title"><%= data.name %> </h4> 
+                    <form method="post" action="/subcription">
+                        <input type="hidden" name="planName" value="<%= data.name %>">
+                        <input type="hidden" name="priceId" value="<%= data.priceId %>">
+                        <div class="form-group">
+                            <label for="username">Full name</label>
+                            <input type="text" name="name" class="form-control" id="username" placeholder="Enter name">
+                        </div>        
+                        <div class="form-group">
+                            <label for="useremail">Email</label>
+                            <input type="email" name="email" class="form-control" id="useremail" aria-describedby="emailHelp" placeholder="Enter email">
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="coutrycode">Country Code</label>
+                            <input type="text" name="country" class="form-control" id="coutrycode" placeholder="Enter country code">
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <input type="text" name="state" class="form-control" id="state" placeholder="Enter state">
+                        </div>
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" name="city" class="form-control" id="city" placeholder="Enter city">
+                        </div>
+                        <div class="form-group">
+                            <!-- <label for="userphone">Phone number</label> -->
+                            <input type="hidden" name="phone" class="form-control" id="userphone" value="9874563210">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Next -></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4"></div>
+  </div>
+</div>
+<% } %> 
+
+<%- include('./partials/footer.ejs'); %> 
