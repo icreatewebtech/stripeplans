@@ -26,6 +26,7 @@ _Above command install all necessary package_
 > nodemon server.js
 
 ### Step 3 Webhook 
+***
 ##### Download and install stripe cli
 > Go to stripe cli docs official page : [Stripe Cli Docs](https://stripe.com/docs/stripe-cli "Get started with the Stripe CLI")
 
