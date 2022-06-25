@@ -15,43 +15,37 @@ _Above command install all necessary package_
 
 ##### Setup .env file 
 ```
-> NODE_ENV="development"  <br />
-> SALT_ROUNDS=10   // salt round for password hash <br />
-> ISSUER="Icreatewebtech" <br />
-> HOST="localhost" <br />
-> SK_TEST="sk_test_xxx"     // Your stripe secret key <br />
-> PK_TEST ="pk_test_xxx"   // Your stripe publishable key <br />
-> STRIPE_WEBHOOK_SECRET="whsec_xxx"  // Your stripe webhook secret <br />
+NODE_ENV="development"  <br />
+SALT_ROUNDS=10   // salt round for password hash <br />
+ISSUER="Icreatewebtech" <br />
+HOST="localhost" <br />
+SK_TEST="sk_test_xxx"     // Your stripe secret key <br />
+PK_TEST ="pk_test_xxx"   // Your stripe publishable key <br />
+STRIPE_WEBHOOK_SECRET="whsec_xxx"  // Your stripe webhook secret <br />
 ```
 
 ##### MySQL Database
 
 We using Wamp server 
-
 If you don't have a wamp then download and install Wamp server : [Wamp Server](https://www.wampserver.com/en/)
 
 1 Start Wamp Server
-
 2 Open yor browser and type http://localhost/phpmyadmin
-
 3 Click on Database tab
-
 4 Type database name stripe_dev  
 
 ###### Database configuration
 
 config.json file is configuration of database connection. 
-
 config.json available in config/config.json directory
 
-###### config.json    
-
+###### config.json
 ```Json
 {
   "development": {
     "username": "root",
     "password": "",
-    "database": "stripe_dev", // your database name
+    "database": "stripe_dev",
     "host": "localhost",
     "dialect": "mysql", 
     "logging": false
@@ -75,8 +69,9 @@ config.json available in config/config.json directory
 }
 ```
 ##### Create table
+```cmd
 > npx sequelize-cli db:migrate
-
+```
 ##### Run project
 > nodemon server.js
 
