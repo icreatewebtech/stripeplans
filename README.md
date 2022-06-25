@@ -9,17 +9,26 @@
 ### Step 2 Setup project
 ---
 ##### Install package 
-> npm i\
+> npm i
 
 _Above command install all necessary package_
 
-### Step 3 Setup .env file 
+##### Setup .env file 
 > NODE_ENV="development"  <br />
 > SALT_ROUNDS=10   // salt round for password hash <br />
 > ISSUER="Icreatewebtech" <br />
 > HOST="localhost" <br />
-> SK_TEST="sk_test_xxx"     // Stripe secret key <br />
-> PK_TEST ="pk_test_xxx"   // Stripe publishable key <br />
-> STRIPE_WEBHOOK_SECRET="whsec_xxx"  // Stripe webhook secret <br />
+> SK_TEST="sk_test_xxx"     // Your stripe secret key <br />
+> PK_TEST ="pk_test_xxx"   // Your stripe publishable key <br />
+> STRIPE_WEBHOOK_SECRET="whsec_xxx"  // Your stripe webhook secret <br />
+
+##### Run project
+> nodemon server.js
+
+### Step 3 Webhook 
+##### Download and install stripe cli
+> Go to stripe cli docs official page and download stripe cli :
+[Stripe Cli Docs](https://stripe.com/docs/stripe-cli "Get started with the Stripe CLI"); 
+
 
 
