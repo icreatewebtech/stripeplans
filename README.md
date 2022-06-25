@@ -3,11 +3,15 @@
 > git clone https://github.com/icreatewebtech/stripeplans.git
 ### Step 1 Create three product on your stripe account
 ---
+> Login in to your stripe account\
+> Go to dashboard > product > Add product
+
 ### Step 2 Setup project
 ---
 ##### Install package 
-> npm i <br />
-Above command install all necessary package
+> npm i 
+<br />
+_Above command install all necessary package_
 ### Step 3 Setup .env file 
 > NODE_ENV="development"  <br />
 > SALT_ROUNDS=10   // salt round for password hash <br />
