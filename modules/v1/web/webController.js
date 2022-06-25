@@ -6,7 +6,7 @@ const Customers = db.Customers;
 
 /* subcription plan views */
 const subriptionPlans  = async (req,res) => {
-    const product = await stripeController.productList();
+    const product = await stripeController.productList({ limit: 3});
     res.render('./web/subcription-palns',{pageTitle: 'Subcription plans', plan: product.data});
 }
 
