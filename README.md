@@ -1,5 +1,5 @@
 # Stripe plans and subcription example in Node.js
-### Fist download code
+### First download code
 > git clone https://github.com/icreatewebtech/stripeplans.git
 ### Step 1 Create three product on your stripe account
 ---
@@ -14,6 +14,7 @@
 _Above command install all necessary package_
 
 ##### Setup .env file 
+```
 > NODE_ENV="development"  <br />
 > SALT_ROUNDS=10   // salt round for password hash <br />
 > ISSUER="Icreatewebtech" <br />
@@ -21,20 +22,21 @@ _Above command install all necessary package_
 > SK_TEST="sk_test_xxx"     // Your stripe secret key <br />
 > PK_TEST ="pk_test_xxx"   // Your stripe publishable key <br />
 > STRIPE_WEBHOOK_SECRET="whsec_xxx"  // Your stripe webhook secret <br />
+```
 
 ##### MySQL Database
 
 We using Wamp server 
 
-IF you don't have a wamp then download and install Wamp server : [Wamp Server](https://www.wampserver.com/en/)
+If you don't have a wamp then download and install Wamp server : [Wamp Server](https://www.wampserver.com/en/)
 
-> Start Wamp Server
+1 Start Wamp Server
 
-> Open yor browser and type http://localhost/phpmyadmin
+2 Open yor browser and type http://localhost/phpmyadmin
 
-> Click on Database tab
+3 Click on Database tab
 
-> Type database name stripe_dev  
+4 Type database name stripe_dev  
 
 ###### Database configuration
 
@@ -42,9 +44,9 @@ config.json file is configuration of database connection.
 
 config.json available in config/config.json directory
 
-> config.json    
+###### config.json    
 
-```JavaScript
+```Json
 {
   "development": {
     "username": "root",
