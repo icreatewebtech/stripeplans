@@ -22,6 +22,59 @@ _Above command install all necessary package_
 > PK_TEST ="pk_test_xxx"   // Your stripe publishable key <br />
 > STRIPE_WEBHOOK_SECRET="whsec_xxx"  // Your stripe webhook secret <br />
 
+##### MySQL Database
+
+We using Wamp server 
+
+IF you don't have a wamp then download and install Wamp server : [Wamp Server](https://www.wampserver.com/en/)
+
+> Start Wamp Server
+
+> Open yor browser and type http://localhost/phpmyadmin
+
+> Click on Database tab
+
+> Type database name stripe_dev  
+
+###### Database configuration
+
+config.json file is configuration of database connection. 
+
+config.json available in config/config.json directory
+
+> config.json    
+
+```JavaScript
+{
+  "development": {
+    "username": "root",
+    "password": "",
+    "database": "stripe_dev", // your database name
+    "host": "localhost",
+    "dialect": "mysql", 
+    "logging": false
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+
+
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
+```
+##### Create table
+> npx sequelize-cli db:migrate
+
 ##### Run project
 > nodemon server.js
 
