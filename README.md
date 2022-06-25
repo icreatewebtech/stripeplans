@@ -27,8 +27,13 @@ _Above command install all necessary package_
 
 ### Step 3 Webhook 
 ##### Download and install stripe cli
-> Go to stripe cli docs official page and download stripe cli :
-[Stripe Cli Docs](https://stripe.com/docs/stripe-cli "Get started with the Stripe CLI"); 
+> Go to stripe cli docs official page : [Stripe Cli Docs](https://stripe.com/docs/stripe-cli "Get started with the Stripe CLI")
+
+> Download and install stripe cli 
+
+Run command 
+
+> stripe listen --forward-to localhost:3000/stripe/webhook
 
 
 
