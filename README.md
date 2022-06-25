@@ -1,45 +1,54 @@
-# Stripe plans and subcription example in Node.js
-### First download code
-> git clone https://github.com/icreatewebtech/stripeplans.git
-### Step 1 Create three product on your stripe account
----
+# Stripe plans and subscription example in Node.js
+## Features
+- Login/Logout
+- Subscription
+- Add card details and checkout
+- Upgrade subscription
+- Cancel subscription
+- Renew subscription
+- Webhook 
+## First download code
+You need to run `git clone https://github.com/icreatewebtech/stripeplans.git` command.
+```
+git clone https://github.com/icreatewebtech/stripeplans.git
+```
+## Step 1 Create three product on your stripe account
 > Login in to your stripe account\
 > Go to dashboard > product > Add product
 
-### Step 2 Setup project
----
-##### Install package 
-> npm i
-
+## Step 2 Setup project
+### Install package 
+You need to run `npm i` command.
+```
+npm i
+```
 _Above command install all necessary package_
 
-##### Setup .env file 
+### Setup .env file 
 ```
-NODE_ENV="development"  <br />
-SALT_ROUNDS=10   // salt round for password hash <br />
-ISSUER="Icreatewebtech" <br />
-HOST="localhost" <br />
-SK_TEST="sk_test_xxx"     // Your stripe secret key <br />
-PK_TEST ="pk_test_xxx"   // Your stripe publishable key <br />
-STRIPE_WEBHOOK_SECRET="whsec_xxx"  // Your stripe webhook secret <br />
+NODE_ENV="development"
+SALT_ROUNDS=10   // salt round for password hash
+ISSUER="Icreatewebtech" 
+HOST="localhost"
+SK_TEST="sk_test_xxx"     // Your stripe secret key
+PK_TEST ="pk_test_xxx"   // Your stripe publishable key
+STRIPE_WEBHOOK_SECRET="whsec_xxx"  // Your stripe webhook secret
 ```
+_Note: Remove all comment in .env file_
+### MySQL Database
+We using `Wamp server` <br/>
+If you don't have a wamp then download and install Wamp server : [Download wamp server](https://www.wampserver.com/en/)
 
-##### MySQL Database
+> Start Wamp Server\
+> Open yor browser and type `http://localhost/phpmyadmin` <br />
+> Click on Database tab\
+> Type database name stripe_dev
 
-We using Wamp server 
-If you don't have a wamp then download and install Wamp server : [Wamp Server](https://www.wampserver.com/en/)
-
-1 Start Wamp Server
-2 Open yor browser and type http://localhost/phpmyadmin
-3 Click on Database tab
-4 Type database name stripe_dev  
-
-###### Database configuration
-
-config.json file is configuration of database connection. 
-config.json available in config/config.json directory
-
-###### config.json
+### Database configuration
+config.json file is configuration of database connection. <br/>
+config.json available in `config/config.json` directory
+##### config.json
+If you use different database then change config file like `"database":"your database-name"` etc...
 ```Json
 {
   "development": {
@@ -54,8 +63,6 @@ config.json available in config/config.json directory
     "username": "root",
     "password": null,
     "database": "database_test",
-
-
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
@@ -68,23 +75,32 @@ config.json available in config/config.json directory
   }
 }
 ```
-##### Create table
-```cmd
-> npx sequelize-cli db:migrate
+##### Create table in database
+You need to run `npx sequelize-cli db:migrate` command.
+```
+npx sequelize-cli db:migrate
 ```
 ##### Run project
-> nodemon server.js
+you need to run `nodemon server.js` command.
+```
+nodemon server.js
+```
 
-### Step 3 Webhook 
-***
+## Step 3 Setup webhook 
+##### Stripe uses webhooks to notify your application when an event happens in your account.
 ##### Download and install stripe cli
-> Go to stripe cli docs official page : [Stripe Cli Docs](https://stripe.com/docs/stripe-cli "Get started with the Stripe CLI")
-
+> Go to stripe cli docs official page : [Stripe Cli Docs](https://stripe.com/docs/stripe-cli "Get started with the Stripe CLI")<br/>
 > Download and install stripe cli 
-
-Run command 
-
-> stripe listen --forward-to localhost:3000/stripe/webhook
+##### Login to stripe CLI
+You need to run `stripe login` command.
+```
+stripe login
+```
+##### Forward to our localserver
+You need to run `stripe listen --forward-to localhost:3000/stripe/webhook` command.
+```
+stripe listen --forward-to localhost:3000/stripe/webhook
+```
 
 
 
