@@ -44,39 +44,11 @@ If you don't have a wamp then download and install Wamp server : [Download wamp 
 > Click on Database tab\
 > Type database name stripe_dev
 
-### Database configuration
-config.json file is configuration of database connection. <br/>
-config.json available in `config/config.json` directory
-##### config.json
-If you use different database then change config file like `"database":"your database-name"` etc...
-```Json
-{
-  "development": {
-    "username": "root",
-    "password": "",
-    "database": "stripe_dev",
-    "host": "localhost",
-    "dialect": "mysql", 
-    "logging": false
-  },
-  "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  },
-  "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  }
-}
-```
-##### Create table in database
-You need to run `npx sequelize-cli db:migrate` command.
+### Sequelize 
+Sequelize is a modern TypeScript and Node.js ORM for Postgres, MySQL, MariaDB, SQLite and SQL Server, and more. Featuring solid transaction support, relations, eager and lazy loading, read replication and more.<br />
+https://sequelize.org/
+##### Tables and models
+Create table in the database you need to run `npx sequelize-cli db:migrate` command.
 ```
 npx sequelize-cli db:migrate
 ```
@@ -96,7 +68,7 @@ You need to run `stripe login` command.
 ```
 stripe login
 ```
-##### Forward to our localserver
+##### Forward to local server
 You need to run `stripe listen --forward-to localhost:3000/stripe/webhook` command.
 ```
 stripe listen --forward-to localhost:3000/stripe/webhook
