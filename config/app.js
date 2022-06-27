@@ -1,6 +1,4 @@
 const express = require('express');
-// const bodyParser = require('body-parser')
-const ejs = require('ejs');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const app = express();
