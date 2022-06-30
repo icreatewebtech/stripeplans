@@ -21,7 +21,9 @@ module.exports = {
         type: Sequelize.STRING
       },
       cancelAtPeriodEnd: {
-        type: Sequelize.STRING
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: 'false'
       },
       name: {
         allowNull: false,
@@ -43,9 +45,6 @@ module.exports = {
       city: {
         type: Sequelize.STRING
       },
-      postalCode: {
-        type: Sequelize.STRING
-      },
       phone: {
         type: Sequelize.STRING
       },
@@ -61,17 +60,15 @@ module.exports = {
       defaultSource: {
         type: Sequelize.STRING
       },
-      invoicePrefix: {
-        type: Sequelize.STRING
-      },
-      defaultPaymentMethod: {
-        type: Sequelize.STRING
-      },
-      nextInvoiceSequence: {
-        type: Sequelize.STRING
+      subcriptionStatus: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: "pending",
       },
       status: {
-        type: Sequelize.STRING
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: "verification_pending",
       },
       createdAt: {
         allowNull: false,

@@ -1,5 +1,6 @@
 const utils = require('../../../helper/utils');
 const db = require('../../../models');
+const { productList, productPrice } = require('../stripe/stripeController');
 const customerModel = db.Customers;
 const orderModel = db.orders;
 
@@ -35,4 +36,12 @@ userService.getOrderWithColumn = (attributes) => {
     return orderModel.findAll(attributes);
 }
 
+/* stripe */
+userService.productList = async () => {
+    return await productList();
+}
+
+userService.productPrice = async (priceId) => {
+    return await productPrice(priceId);
+}
 module.exports = userService;

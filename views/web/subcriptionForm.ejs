@@ -1,42 +1,41 @@
 <%- include('./partials/header.ejs'); %> 
 <%- include('./partials/navbar.ejs'); %> 
 <% if(data) { %> 
-<div class="container">
+<div class="container my-5">
     <div class="row">
         <div class="col-sm-3"></div>
         <div class="col-sm-5">
-            <div class="caard">
-                <div class="card-body">
-                    <h4 class="cart-title"><%= data.name %> </h4> 
+            <div class="card shadow">
+                <div class="card-header text-white bg-primary"><%= data.name %></div>
+                <div class="card-body">                    
                     <form method="post" action="/subcription">
                         <input type="hidden" name="planName" value="<%= data.name %>">
                         <input type="hidden" name="priceId" value="<%= data.priceId %>">
-                        <div class="form-group">
+                        <div class="form-group mb-2">
                             <label for="username">Full name</label>
                             <input type="text" name="name" class="form-control" id="username" placeholder="Enter name">
-                        </div>        
-                        <div class="form-group">
+                        </div> 
+                        <div class="form-group mb-2">
                             <label for="useremail">Email</label>
-                            <input type="email" name="email" class="form-control" id="useremail" aria-describedby="emailHelp" placeholder="Enter email">
-                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                            <input type="email" name="email" class="form-control" id="useremail" placeholder="Enter email">                    
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-2">
                             <label for="coutrycode">Country Code</label>
-                            <input type="text" name="country" class="form-control" id="coutrycode" placeholder="Enter country code">
+                            <input type="text" name="country" class="form-control" id="coutrycode" placeholder="Enter country code">                            
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-2">
                             <label for="state">State</label>
                             <input type="text" name="state" class="form-control" id="state" placeholder="Enter state">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-2">
                             <label for="city">City</label>
                             <input type="text" name="city" class="form-control" id="city" placeholder="Enter city">
                         </div>
-                        <div class="form-group">
-                            <!-- <label for="userphone">Phone number</label> -->
-                            <input type="hidden" name="phone" class="form-control" id="userphone" value="9874563210">
+                        <div class="form-group mb-3">
+                            <label for="userphone">Phone number</label>
+                            <input type="number" name="phone" class="form-control" id="userphone">                            
                         </div>
-                        <button type="submit" class="btn btn-primary">Next -></button>
+                        <button type="submit" class="btn btn-primary px-4">Next -></button>
                     </form>
                 </div>
             </div>

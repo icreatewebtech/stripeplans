@@ -1,0 +1,26 @@
+<%- include('./partials/header.ejs'); %>
+<%- include('./partials/navbar.ejs'); %>
+    <% if(plan.length) { %>
+        <div class="container mt-3">
+            <div class="row">
+                <% for(let i=0 ; i < plan.length; i++) { %>
+                        <% if (plan[i].name !== "Free") { %>
+                        <div class="col-md-4 mb-2">
+                            <div class="card shadow">
+                                <div class="card-header text-white bg-primary"><%= plan[i].name %></div>
+                                <div class="card-body">
+                                    <h4 class="card-title"><i class="fas fa-rupee-sign"></i><%= price[i].unit_amount/100 %>/<%= price[i].recurring.interval %></h4>
+                                    <form action="/stripe/upgradePlan" method="post" name="<%= plan[i].name %>">                                    
+                                        <input type="hidden" name="priceId" value="<%= plan[i].default_price %>">                             
+                                        <input type="hidden" name="planName" value="<%= plan[i].name %>">                             
+                                        <input type="submit" name="changePlan" value="Change" class="btn btn-primary px-4">
+                                    </form> 
+                                </div>
+                            </div>
+                        </div>
+                    <%  } %>                     
+                <% } %>
+            </div>
+        </div>
+    <% } %>
+ <%- include('./partials/footer.ejs'); %>

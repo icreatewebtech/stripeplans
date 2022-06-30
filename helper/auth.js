@@ -16,12 +16,11 @@ auth.isAuthenticateUser = async (req,res,next) => {
     userService.getUser({where}).then((user) => {
         if (user) {     
             if (user.status === 'active') {
-                let data = user.toJSON();       
-                // delete data.password;
+                let data = user.toJSON();                       
                 req.authUser = data;
                 return next();   
             } else {
-                return res.status(403).json({status: false, message: "your subcription was ended."});
+                return res.render("web/default",{pageTitle: "Subscription Canceled" ,status: false, message: "your subcription was ended."});
             }
         }
         return res.status(403).json({status: false, message: 'forbidden access'});

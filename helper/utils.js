@@ -24,6 +24,7 @@ utils.empty = (mixedVar) => {
     return false;
 }
 
+/* match password */
 utils.compare = (data, hash) => {
     return bcrypt.compareSync(data,hash);
 }

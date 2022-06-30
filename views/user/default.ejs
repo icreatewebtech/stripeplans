@@ -1,0 +1,21 @@
+<%- include('./partials/header.ejs'); %> 
+<%- include('./partials/navbar.ejs'); %> 
+
+<div class="container mt-3">
+    <div class="row">        
+        <div class="col-md-8">
+            <% if(status === true) { %> 
+                <div class="alert alert-success" role="alert">
+                    <%= message %> 
+                </div>
+            <% } %> 
+            <% if(status === false) { %> 
+                <div class="alert alert-danger" role="alert">
+                    <%= message %> 
+                </div>
+            <% } %>           
+        </div>
+    </div>
+</div>
+
+<%- include('./partials/footer.ejs'); %> 

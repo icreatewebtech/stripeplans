@@ -7,7 +7,7 @@ const app = express();
 app.set("view engine","ejs");
 
 // parse application/json
-app.use(bodyParser.raw({type:  "application/json"}));
+app.use(bodyParser.raw({type: "application/json"}));
 
 // use cookies
 app.use(cookieParser()); 

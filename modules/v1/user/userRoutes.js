@@ -24,18 +24,41 @@ userRoute.get('/logout',logoutMiddleware);
 /* dashboard */
 const dashboardMiddleware = [
     auth.isAuthenticateUser,
+    userMiddleware.hasSubscription,
     userController.dashboard
 ];
 userRoute.get('/dashboard',dashboardMiddleware);
 
-/* Create or Update password */
-const passwordMiddleware = [
-    auth.isAuthenticateUser,
+/* Create password */
+const createPasswordMiddleware = [
     userValidator.matchPassword(),
+    validationHandler,
+    userController.createPassword,
+];
+userRoute.post('/createPassword',createPasswordMiddleware);
+
+/* Update password */
+const updatePasswordMiddleware = [
+    auth.isAuthenticateUser,
+    userValidator.matchUpdatePassword(),
     validationHandler,
     userController.updatePassword,
 ];
-userRoute.post('/createPassword',passwordMiddleware);
+userRoute.post('/updatePassword',updatePasswordMiddleware);
 
+/* checkout and generation tocken */
+const checkoutMiddleware = [
+    auth.isAuthenticateUser,
+    userController.checkout
+];
+userRoute.get('/checkout', checkoutMiddleware);
+
+/* change plan */
+const changePlanMiddleware = [
+    auth.isAuthenticateUser,
+    userController.changePlan
+];
+userRoute.get('/changePlan',changePlanMiddleware);
 module.exports = userRoute;
+
 

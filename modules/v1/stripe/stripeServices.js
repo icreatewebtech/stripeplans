@@ -4,6 +4,7 @@ const customerModel = db.Customers;
 const orderModel = db.orders;
 const stripeServices = {};
 
+/* find user by email */
 stripeServices.findOneUserByEmail = (email) => {
     let query = {
         where: {
@@ -13,10 +14,12 @@ stripeServices.findOneUserByEmail = (email) => {
     return customerModel.findOne(query);
 }  
 
+/* find one user */
 stripeServices.getUser = (where) => {
     return customerModel.findOne(where);
 }
 
+/* update user */
 stripeServices.updateUser = (data,where) => {
     return customerModel.update(data,where);
 }

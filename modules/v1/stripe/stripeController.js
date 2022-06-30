@@ -4,23 +4,27 @@ const utils = require('../../../helper/utils');
 const stripeServices = require('./stripeServices');
 const stripeController = {};
 
-/* stripe product list */
-stripeController.productList = async () => {
-    const products = await stripe.products.list({});
+/* Product List */
+stripeController.productList = async (limit) => {
+    const products = await stripe.products.list(limit);
     return products;
 }
+/* Default Price */
+stripeController.productPrice = async (priceId) => {
+    const price = await stripe.prices.retrieve(priceId);
+    return price;
+}
 
-
-/*  creating   */ 
+/*  create subscription */ 
 stripeController.createSubscription = async (req,res) => {
-    let customer, subcription;
-    let tocken = req.cookies.mycustomer;
+    let subcription;
+    let tocken = req.cookies.secretTocken;
     let stripeTocken = req.body.stripeToken; 
 
     if(tocken && stripeTocken) {
-      tocken = jwt.verify(tocken);
-      let user = await stripeServices.getUser({ where: { id: tocken.userId }});
-      let data = user.dataValues;
+        tocken = jwt.verify(tocken);
+        let user = await stripeServices.getUser({ where: { id: tocken.userId }});
+        let data = user.dataValues;       
       try {             
             await stripe.customers.create({
                 name: data.name,
@@ -45,80 +49,117 @@ stripeController.createSubscription = async (req,res) => {
                     customerId: subcription.customer,
                     subcriptionId: subcription.id,
                     currentPeriodEnd: new Date(subcription.current_period_end * 1000),
-                    currentPeriodStart: new Date(subcription.current_period_start * 1000),
-                    defaultPaymentMethod: subcription.default_payment_method,
-                    latestInvoice: subcription.latest_invoice,
-                    status: subcription.status
+                    currentPeriodStart: new Date(subcription.current_period_start * 1000),                                        
+                    subcriptionStatus: subcription.status
                 },{
                     where: {
                         id: data.id
                     }
                 }); 
                 console.log(subcription.latest_invoice);
-                console.log('stripe customer and subcription successfully created.');
+                console.log('stripe customer and subscription successfully created.');
         });
         } catch (error) {
             console.log(error);
         } 
         res.clearCookie('mycustomer');
-        tocken = jwt.createSecretTocken({ userId: data.id});
-        res.cookie('secretTocken',tocken);
+        tocken = jwt.createSecretTocken({ userId: data.id});        
         return res.redirect('/user/dashboard');
     } else {
-        return res.status(200).json({status: 'false', message: 'subcription fail'});
+        return res.render('web/default', { pageTitle: "Stripe subscriptions",status: false, message: 'Stripe subscriptions failed'});        
     }
 };
 
 
 /* Cancel subcription */
-stripeController.cancelSubcription =  async (req,res) => {
+stripeController.cancelSubcription =  async (req,res) => { 
+    let { customerId, renewStatus } = req.body;
+    if (req.authUser.customerId === customerId) {
+        let user = req.authUser;
+        await stripe.subscriptions.update(
+            user.subcriptionId,
+            {
+                cancel_at_period_end: renewStatus
+            }
+        ).then(async () => {
+            await stripeServices.updateUser({
+                cancelAtPeriodEnd: renewStatus
+            },{
+                where: {
+                    customerId: user.customerId
+                }
+            }).catch((err) => {
+                return res.render('user/default', { pageTitle: "Subscription cancel",status: false, message: 'Your subcription was not cancel', user: user});
+            });
+        }).catch((err) => {
+            return res.render('user/default', { pageTitle: "Subscription cancel",status: false, message: 'Your stripe subcription was not cancel', user: user});
+        }); 
+        return res.redirect("/user/dashboard");
+    } else {
+        return res.render('web/default', { pageTitle: "Access denied",status: false, message: 'Unauthorized access'});        
+    }
+}
+
+/* Change Plan */
+stripeController.upgradePlan = async (req,res) => {
+    if (req.authUser) {
+        let user = req.authUser;
+        let newPriceId = req.body.priceId;
+        let productName = req.body.planName;
+        const subscription = await stripe.subscriptions.retrieve(user.subcriptionId);
+        await stripe.subscriptions.update(subscription.id, {
+            cancel_at_period_end: false,
+            off_session: true,
+            proration_behavior: 'create_prorations',
+            items: [{
+              id: subscription.items.data[0].id,
+              price: newPriceId,
+            }]
+        }).then( async (subcription) => {
+            await stripeServices.updateUser({
+                planName: productName,
+                priceId: newPriceId,            
+            },{
+                where: {
+                    customerId: user.customerId
+                }
+            }).catch((err) => {
+                return res.render('user/default', { pageTitle: "Subscription Upgrade",status: false, message: 'Failed to change subscription.', user});
+            });
+            return res.redirect("/user/dashboard");
+        }).catch((err) => {
+            return res.render('user/default', { pageTitle: "Subscription Upgrade",status: false, message: 'Failed to change stripe subscription.', user});
+        });        
+    } else {
+        return res.render('web/default', { pageTitle: "Access denied",status: false, message: 'Unauthorized access'});
+    }
+}
+
+/* Cancel Subscription */
+stripeController.deleteSubscription = async (req,res) => {
     if (req.authUser.customerId === req.body.customerId) {
         let user = req.authUser;
-        if(req.body.cancelSubcription) {     
-            try {
-                const subscription = await stripe.subscriptions.update(
-                    req.body.subcriptionId,
-                    {
-                        cancel_at_period_end: true
-                    }
-                ).then(async () => {
-                    await stripeServices.updateUser({
-                        cancelAtPeriodEnd: "true"
-                    },{
-                        where: {
-                            customerId: user.customerId
-                        }
-                    });
-                });            
-                return res.redirect("/user/dashboard");
-            } catch (error) {
-                return res.status(200).json({status: false, message: error});
-            } 
-        }
-        if (req.body.renewSubcription) {         
-            try {
-                const subscription = await stripe.subscriptions.update(
-                    req.body.subcriptionId,
-                    {
-                        cancel_at_period_end: false
-                    }
-                ).then(async () => {
-                    await stripeServices.updateUser({
-                        cancelAtPeriodEnd: "false"
-                    },{
-                        where: {
-                            customerId: user.customerId
-                        }
-                    });
-                });            
-                return res.redirect("/user/dashboard");
-            } catch (error) {
-                return res.status(200).json({status: false, message: error});
-            } 
-        }
+        await stripe.subscriptions.del(req.body.subcriptionId)
+        .then( async () => {
+            await stripeServices.updateUser({
+                subcriptionStatus: 'cancelled'          
+            },{
+                where: {
+                    customerId: req.body.customerId
+                }
+            })
+            .catch((err) => {
+                return res.render('user/default', { pageTitle: "Subscription Cancel",status: false, message: 'Failed to cancel subscription.', user});
+            });
+            return res.render('web/default', { pageTitle: "Subscription cancelled",status: true, message: 'Your subscription cancelled'});
+        })
+        .catch((err) => {
+            console.log(err);
+            return res.render('user/default', { pageTitle: "Subscription Cancel",status: false, message: 'Failed to cancel stripe subscription.', user});
+        });        
     } else {
-        return res.status(403).json({status: false, message: 'Unauthorized user'});
-    } 
+        return res.render('web/default', { pageTitle: "Access denied",status: false, message: 'Unauthorized access'});
+    }
 }
 
 /* webhook  */
@@ -257,45 +298,4 @@ stripeController.webhook = async (req, res) => {
     res.sendStatus(200);
 };
 
-stripeController.upgradePlan = async (req,res) => {
-    let productPrice, productName;
-    let product = await stripeController.productList();
-    for(let i = 0; i < product.data.length; i++) {
-        if(product.data[i].name === req.body.planName) {
-            console.log(product.data[i].name);
-            productPrice = product.data[i].default_price;
-            productName = product.data[i].name;
-        }
-    }    
-    try {        
-        const subscription = await stripe.subscriptions.retrieve(req.body.subcriptionId);
-        console.log(subscription);
-        await stripe.subscriptions.update(req.body.subcriptionId, {
-            cancel_at_period_end: false,
-            off_session: true,
-            proration_behavior: 'create_prorations',
-            items: [{
-              id: subscription.items.data[0].id,
-              price: productPrice,
-            }]
-        }).then( async (subcription) => {
-            await stripeServices.updateUser({
-                planName: productName,
-                priceId: productPrice,            
-            },{
-                where: {
-                    customerId: req.body.customerId
-                }
-            });
-        });
-        console.log(`Subcription upgraded to ${productName}`);
-        return res.redirect('/user/dashboard');
-    } catch (error) {
-        console.log(error);
-    } 
-}
-
 module.exports = stripeController;
-
-
-
