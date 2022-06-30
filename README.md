@@ -1,18 +1,20 @@
 # Stripe plans and subscription example in Node.js
 ## Features
+- Sign up
+- Email verification
 - Login/Logout
-- Subscription
+- Create subscription
 - Add card details and checkout
-- Upgrade subscription
+- Change subscription
 - Cancel subscription
-- Renew subscription
+- Auto renew on/off subscription
 - Webhook 
 ## First download code
 You need to run `git clone https://github.com/icreatewebtech/stripeplans.git` command.
 ```
 git clone https://github.com/icreatewebtech/stripeplans.git
 ```
-## Step 1 Create three product on your stripe account
+## Step 1 Create product on your stripe account
 > Login in to your stripe account\
 > Go to dashboard > product > Add product
 
@@ -27,22 +29,31 @@ _Above command install all necessary package_
 ### Setup .env file 
 ```
 NODE_ENV="development"
-SALT_ROUNDS=10   // salt round for password hash
+# salt round for password hash
+SALT_ROUNDS=10
 ISSUER="Icreatewebtech" 
 HOST="localhost"
-SK_TEST="sk_test_xxx"     // Your stripe secret key
-PK_TEST ="pk_test_xxx"   // Your stripe publishable key
-STRIPE_WEBHOOK_SECRET="whsec_xxx"  // Your stripe webhook secret
+# Your stripe secret key
+SK_TEST="sk_test_xxx" 
+# Your stripe publishable key
+PK_TEST ="pk_test_xxx"
+# Your stripe webhook secret
+STRIPE_WEBHOOK_SECRET="whsec_xxx"
+# Google OAuth2
+EMAIL=""
+REFRESH_TOKEN=""
+CLIENT_ID=""
+CLIENT_SECRET=""
 ```
-_Note: Remove all comment in .env file_
 ### MySQL Database
 We using `Wamp server` <br/>
 If you don't have a wamp then download and install Wamp server : [Download wamp server](https://www.wampserver.com/en/)
 
-> Start Wamp Server\
+> Start wamp server\
 > Open yor browser and type `http://localhost/phpmyadmin` <br />
-> Click on Database tab\
-> Type database name stripe_dev
+> Click on database tab\
+> Enter database name stripe_dev\
+> Click on create button
 
 ### Sequelize 
 Sequelize is a modern TypeScript and Node.js ORM for Postgres, MySQL, MariaDB, SQLite and SQL Server, and more. Featuring solid transaction support, relations, eager and lazy loading, read replication and more.<br />
