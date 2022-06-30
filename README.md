@@ -73,6 +73,3 @@ You need to run `stripe listen --forward-to localhost:3000/stripe/webhook` comma
 ```
 stripe listen --forward-to localhost:3000/stripe/webhook
 ```
-
-
-
