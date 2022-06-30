@@ -5,7 +5,7 @@
 - Login/Logout
 - Create subscription
 - Add card details and checkout
-- Change subscription
+- Upgrade/Downgrade subscription
 - Cancel subscription
 - Auto renew on/off subscription
 - Webhook 
